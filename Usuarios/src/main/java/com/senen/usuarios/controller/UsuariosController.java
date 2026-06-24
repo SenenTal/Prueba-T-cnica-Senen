@@ -15,6 +15,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author senen
  */
+@CrossOrigin(origins={"http://localhost:4000"})
 @RestController
 @RequestMapping("/usuarios")
 public class UsuariosController {
@@ -40,10 +42,10 @@ public class UsuariosController {
         List<Usuarios> listado = service.obtenerUsuarios();
         if (listado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(new ApiResponse(true, "Listado de usuarios Vacio", HttpStatus.NO_CONTENT));
+                    .body(new ApiResponse(true, "Listado de usuarios vacía", HttpStatus.NO_CONTENT));
         } else {
             return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(new ApiResponse(true, "Listado de usuarios Vacio", HttpStatus.FOUND,
+                    .body(new ApiResponse(true, "Listado de usuarios", HttpStatus.FOUND,
                             listado));
         }
     }
@@ -77,20 +79,20 @@ public class UsuariosController {
         } else {
             service.eliminarUsuario(id);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body(
-            new ApiResponse<>(true, "Usuario: " + usuario.getUser() + "ha sido eliminado", 
+            new ApiResponse<>(true, "Usuario: " + usuario.getUser() + " ha sido eliminado", 
                     HttpStatus.NO_CONTENT));
         }
     }
     
-    @GetMapping("/sesion")
+    @PostMapping("/sesion")
     public ResponseEntity<ApiResponse<?>> iniciarSesion(@RequestBody @Valid UserAccessDTO usuario){
-        boolean access = service.obtenerAcceso(usuario.getUsername(), usuario.getPassword());
-        if(access){
-            return ResponseEntity.status(HttpStatus.OK).body(
-            new ApiResponse<>(access,"Ha iniciado sesión",HttpStatus.OK));
+        Usuarios access = service.obtenerAcceso(usuario.getUsername(), usuario.getPassword());
+        if(access == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
+            new ApiResponse<>(false,"No autorizado",HttpStatus.UNAUTHORIZED, access));
         }else{
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(
-            new ApiResponse<>(access,"No autorizado",HttpStatus.UNAUTHORIZED));
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(
+            new ApiResponse<>(true,"Ha iniciado sesion",HttpStatus.ACCEPTED, access));
     }
     }
         
@@ -103,7 +105,7 @@ public class UsuariosController {
                     .body(new ApiResponse<>(false, "Petición no realizada", HttpStatus.NOT_IMPLEMENTED));
         } else{
             return ResponseEntity.status(HttpStatus.ACCEPTED)
-                    .body(new ApiResponse<>(true, "Nueva administrador de página: " + newUsuario.getUsuario(), 
+                    .body(new ApiResponse<>(true, "Nuevo administrador/a de página: " + newUsuario.getUsuario(), 
                             HttpStatus.ACCEPTED, newUsuario));
         }
     }
@@ -122,9 +124,9 @@ public class UsuariosController {
         }
     }
     
-    @PutMapping()
-    public ResponseEntity<ApiResponse<?>> actualizarUsuario(@RequestBody @Valid UserDTO user){
-        Usuarios usuarioUpdated = service.modificarUsuario(user.getUsuario(), user.getPassword(), 
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<?>> actualizarUsuario(@PathVariable("id") @Valid Long id,@RequestBody @Valid UserDTO user){
+        Usuarios usuarioUpdated = service.modificarUsuario(id, user.getUsuario(), user.getPassword(), 
                 user.getNickname());
         if(usuarioUpdated == null){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -135,4 +137,6 @@ public class UsuariosController {
                     usuarioUpdated));
         }
     }
+    
+    
 }

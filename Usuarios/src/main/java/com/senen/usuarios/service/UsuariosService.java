@@ -16,7 +16,7 @@ public interface UsuariosService {
     
     Usuarios obtenerUsuario(Long id);
     
-    boolean obtenerAcceso(String username, String password);
+    Usuarios obtenerAcceso(String username, String password);
     
     Usuarios crearUsuario(String username, String password, String nickname);
     
@@ -26,7 +26,8 @@ public interface UsuariosService {
     
     UserAdminDTO hacerAdmin(String username);
     
-    Usuarios modificarUsuario(String username, String password, String nickname);
+    Usuarios modificarUsuario(Long id, String username, String password, String nickname);
     
     UserAdminDTO hacerUser(String username);
+    
 }

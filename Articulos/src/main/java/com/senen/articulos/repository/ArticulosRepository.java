@@ -27,7 +27,7 @@ public interface ArticulosRepository extends JpaRepository<Articulos, Long>{
     
     @Transactional
     @Query(value = "SELECT * FROM fn_crear_articulo(:titulo, :descripcion, "
-            + ":precio, :categoria, :ubicacion, :imagen, :id_usuario", nativeQuery = true)
+            + ":precio, :categoria, :ubicacion, :imagen, :id_usuario)", nativeQuery = true)
     Articulos crearArticulo(@Param("titulo") String titulo, @Param("descripcion") String descripcion,
             @Param("precio") float precio, @Param("categoria") String categoria, 
             @Param("ubicacion") String ubicacion, @Param("imagen") String imagen, 
@@ -36,32 +36,55 @@ public interface ArticulosRepository extends JpaRepository<Articulos, Long>{
     @Modifying
     @Transactional
     @Query(value = "CALL sp_delete_articulo_id(:id)", nativeQuery = true)
-    void borrarArticulo(@Param(":id") Long id);
+    void borrarArticulo(@Param("id") Long id);
     
     @Transactional
     @Query(value = "SELECT * FROM fn_buscar_por_categoria(:categoria)", nativeQuery = true)
-    List<ArticulosCategoriaDTO> buscarPorCategoria(@Param(":categoria") String categoria);
+    List<ArticulosCategoriaDTO> buscarPorCategoria(@Param("categoria") String categoria);
     
     @Transactional
     @Query(value = "SELECT * FROM fn_buscar_nombre_articulo(:titulo)", nativeQuery = true)
     List<ArticulosCategoriaDTO> buscarPorTitulo(@Param("titulo") String titulo);
     
     @Transactional
-    @Query(value = "SELECT * FROM fn_obtener_articulos_por_id(:id)", nativeQuery = true)
+    @Query(value = "SELECT * FROM fn_obtener_articulo_por_id(:id)", nativeQuery = true)
     ArticulosCategoriaDTO buscarPorId(@Param("id") Long id_articulo);
     
     @Transactional
-    @Query(value = "SELECT * FROM fn_modificar_articulo_1(:articulo_id, :usuario_id, :titulo, :descripcion,"
-            + " :precio, :categoria, :estado_articulo, :ubicacion, CURRENT_TIMESTAMP)", nativeQuery = true)
-    ArticulosCategoriaDTO modificarArticulo1(@Param("articulo_id") Long id_articulo, @Param("usuario_id") Long id_usuario,
+    @Query(value = """
+                   SELECT * FROM fn_modificar_articulo_1(
+                           CAST(:id_articulo AS BIGINT),
+                           CAST(:id_usuario AS BIGINT),
+                           CAST(:titulo AS VARCHAR),
+                           CAST(:descripcion AS VARCHAR),
+                           CAST(:precio AS REAL),
+                           CAST(:categoria AS VARCHAR),
+                           CAST(:estado_articulo AS BOOLEAN),
+                           CAST(:ubicacion AS VARCHAR),
+                           CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
+                       )
+                   """, nativeQuery = true)
+    ArticulosCategoriaDTO modificarArticulo1(@Param("id_articulo") Long id_articulo, @Param("id_usuario") Long id_usuario,
             @Param("titulo") String titulo, @Param("descripcion") String descripcion, @Param("precio") float precio,
             @Param("categoria") String categoria, @Param("estado_articulo") boolean estadoArticulo, 
             @Param("ubicacion") String ubicacion);
     
     @Transactional
-    @Query(value = "SELECT * FROM fn_modificar_articulo_2(:articulo_id, :usuario_id, :titulo, :descripcion,"
-            + " :precio, :categoria, :estado_articulo, :ubicacion, CURRENT_TIMESTAMP, :imagen)", nativeQuery = true)
-    ArticulosCategoriaDTO modificarArticulo2(@Param("articulo_id") Long id_articulo, @Param("usuario_id") Long id_usuario,
+    @Query(value = """
+                   SELECT * FROM fn_modificar_articulo_2(
+                           CAST(:id_articulo AS BIGINT),
+                           CAST(:id_usuario AS BIGINT),
+                           CAST(:titulo AS VARCHAR),
+                           CAST(:descripcion AS VARCHAR),
+                           CAST(:precio AS REAL),
+                           CAST(:categoria AS VARCHAR),
+                           CAST(:estado_articulo AS BOOLEAN),
+                           CAST(:ubicacion AS VARCHAR),
+                           CAST(CURRENT_TIMESTAMP AS TIMESTAMP),
+                           CAST(:imagen AS VARCHAR)
+                       )
+                   """, nativeQuery = true)
+    ArticulosCategoriaDTO modificarArticulo2(@Param("id_articulo") Long id_articulo, @Param("id_usuario") Long id_usuario,
             @Param("titulo") String titulo, @Param("descripcion") String descripcion, @Param("precio") float precio,
             @Param("categoria") String categoria, @Param("estado_articulo") boolean estadoArticulo, 
             @Param("ubicacion") String ubicacion, @Param("imagen") String imagen);

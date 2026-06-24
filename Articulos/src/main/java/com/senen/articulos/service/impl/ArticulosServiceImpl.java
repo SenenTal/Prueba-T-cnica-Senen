@@ -6,15 +6,22 @@ package com.senen.articulos.service.impl;
 
 import com.senen.articulos.DTO.ArticulosCategoriaDTO;
 import com.senen.articulos.DTO.ArticulosUsuariosDTO;
+import com.senen.articulos.DTO.InsertarArticulosDTO;
 import com.senen.articulos.DTO.ModificarArticulo1DTO;
 import com.senen.articulos.DTO.ModificarArticulo2DTO;
 import com.senen.articulos.entities.Articulos;
 import com.senen.articulos.exception.DatabaseOperationException;
 import com.senen.articulos.repository.ArticulosRepository;
 import com.senen.articulos.service.ArticulosService;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -57,12 +64,33 @@ public class ArticulosServiceImpl implements ArticulosService {
     }
 
     @Override
-    public ArticulosCategoriaDTO actualizarArticulo2(Long idArticulo, ModificarArticulo2DTO articulo) {
+    public ArticulosCategoriaDTO actualizarArticulo2(Long idArticulo,
+            ModificarArticulo1DTO articulo, MultipartFile imagen) {
         //Obtener los datos de ModificarArticuloDTO
         try {
+            String nombreArchivo = null;
+            if (imagen.isEmpty() || imagen == null) {
+                throw new RuntimeException("Archivo vacío");
+            }
+            String archivo = imagen.getOriginalFilename();
+            nombreArchivo = UUID.randomUUID() + "_" + (archivo != null ? archivo : "file");
+
+            Path carpeta = Paths.get("C:\\Users\\senen\\Documents\\Mi Portafolio\\Proyectos Spring Boot\\Marketplace\\Imagenes");
+            //Comprobación de la ruta
+            if (!Files.exists(carpeta)) {
+                Files.createDirectories(carpeta);
+            }
+
+            Path destino = carpeta.resolve(nombreArchivo);
+
+            Files.copy(
+                    imagen.getInputStream(),
+                    destino,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
             return repository.modificarArticulo2(idArticulo, articulo.getIdUsuario(), articulo.getTitulo(),
                     articulo.getDescripcion(), articulo.getPrecio(), articulo.getCategoria(),
-                    articulo.getEstadoArticulo(), articulo.getUbicacion(), articulo.getImagen());
+                    articulo.getEstadoArticulo(), articulo.getUbicacion(), nombreArchivo);
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }
@@ -78,11 +106,32 @@ public class ArticulosServiceImpl implements ArticulosService {
     }
 
     @Override
-    public Articulos crearArticulo(Articulos newArticulo) {
+    public Articulos crearArticulo(InsertarArticulosDTO newArticulo, MultipartFile imagen) {
         try {
+            String nombreArchivo = null;
+            if (imagen.isEmpty() || imagen == null) {
+                throw new RuntimeException("Archivo vacío");
+            }
+            String archivo = imagen.getOriginalFilename();
+            nombreArchivo = UUID.randomUUID() + "_" + (archivo != null ? archivo : "file");
+
+            Path carpeta = Paths.get("C:\\Users\\senen\\Documents\\Mi Portafolio\\Proyectos Spring Boot\\Marketplace\\Imagenes");
+            //Comprobación de la ruta
+            if (!Files.exists(carpeta)) {
+                Files.createDirectories(carpeta);
+            }
+
+            Path destino = carpeta.resolve(nombreArchivo);
+
+            Files.copy(
+                    imagen.getInputStream(),
+                    destino,
+                    StandardCopyOption.REPLACE_EXISTING
+            );
+
             return repository.crearArticulo(newArticulo.getTitulo(), newArticulo.getDescripcion(),
                     newArticulo.getPrecio(), newArticulo.getCategoria(),
-                    newArticulo.getUbicacion(), newArticulo.getImagen(), newArticulo.getIdUsuario());
+                    newArticulo.getUbicacion(), nombreArchivo, newArticulo.getIdUsuario());
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }

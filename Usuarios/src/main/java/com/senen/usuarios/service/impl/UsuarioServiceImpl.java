@@ -34,10 +34,10 @@ public class UsuarioServiceImpl implements UsuariosService {
     }
 
     @Override
-    public boolean obtenerAcceso(String username, String password) {
+    public Usuarios obtenerAcceso(String username, String password) {
         try {
-            AccesoDTO sesion = repository.iniciarSesion(username, password);
-            return sesion.getAcceso();
+            Usuarios sesion = repository.iniciarSesion(username, password);
+            return sesion;
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }
@@ -46,6 +46,7 @@ public class UsuarioServiceImpl implements UsuariosService {
     @Override
     public Usuarios crearUsuario(String username, String password, String nickname) {
         try {
+            System.out.println("ENTRO AL SERVICE CREAR USUARIO");
             return repository.crearUsuario(username, nickname, password);
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
@@ -80,9 +81,9 @@ public class UsuarioServiceImpl implements UsuariosService {
     }
 
     @Override
-    public Usuarios modificarUsuario(String username, String password, String nickname) {
+    public Usuarios modificarUsuario(Long id, String username, String password, String nickname) {
         try {
-            return repository.actualizarUsuario(username, nickname, password);
+            return repository.actualizarUsuario(id,username, nickname, password);
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }
@@ -96,5 +97,6 @@ public class UsuarioServiceImpl implements UsuariosService {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }
     }
+    
 
 }

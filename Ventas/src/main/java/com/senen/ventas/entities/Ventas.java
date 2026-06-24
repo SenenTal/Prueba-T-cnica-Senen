@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Ventas {
     @Id
     private Long id;
-    private Integer cantidad;
+    private float cantidad;
     @Column(name = "articulo_id")
     private Long articuloId;
     @Column(name = "fecha_venta")
@@ -33,11 +33,11 @@ public class Ventas {
         this.id = id;
     }
 
-    public Integer getCantidad() {
+    public float getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(float cantidad) {
         this.cantidad = cantidad;
     }
 

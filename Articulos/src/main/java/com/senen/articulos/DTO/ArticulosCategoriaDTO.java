@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author senen
  */
 public interface ArticulosCategoriaDTO {
-    Long getId();
+    Long getIdArticulo();
     
     String getTitulo();
     

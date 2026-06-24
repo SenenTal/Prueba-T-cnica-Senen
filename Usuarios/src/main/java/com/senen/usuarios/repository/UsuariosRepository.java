@@ -40,19 +40,20 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, Long>{
     
     @Modifying
     @Transactional
-    @Query(value = "CALL sp_delete_usuario(:id)", nativeQuery = true)
+    @Query(value = "CALL sp_borrar_usuario(:id)", nativeQuery = true)
     void borrarUsuario(@Param("id") Long id);
     
     @Transactional
     @Query(value = "SELECT * FROM fn_iniciar_sesion(:user, :password)", nativeQuery= true)
-    AccesoDTO iniciarSesion(@Param("user") String user, @Param("password") String password);
+    Usuarios iniciarSesion(@Param("user") String user, @Param("password") String password);
     
     @Transactional
-    @Query(value = "SELECT * FROM fn_update_usuario(:user, :password, :nickname)", nativeQuery = true)
-    Usuarios actualizarUsuario(@Param("user") String user, @Param("nickname") String nickname,
+    @Query(value = "SELECT * FROM fn_update_usuario(:id, :user, :password, :nickname)", nativeQuery = true)
+    Usuarios actualizarUsuario(@Param("id") Long id,@Param("user") String user, @Param("nickname") String nickname,
             @Param("password") String password);
     
     @Transactional
     @Query(value = "SELECT * FROM fn_hacer_user(:user)", nativeQuery = true)
     UserAdminDTO hacerUser(@Param("user") String user);
+
 }

@@ -9,7 +9,6 @@ package com.senen.articulos.DTO;
  * @author senen
  */
 public class ModificarArticulo1DTO {
-    Long idArticulo;
     Long idUsuario;
     String titulo;
     String descripcion;
@@ -17,10 +16,6 @@ public class ModificarArticulo1DTO {
     String categoria;
     boolean estadoArticulo;
     String ubicacion;
-
-    public Long getIdArticulo() {
-        return idArticulo;
-    }
 
     public Long getIdUsuario() {
         return idUsuario;

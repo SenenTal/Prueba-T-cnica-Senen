@@ -4,23 +4,21 @@
  */
 package com.senen.articulos.DTO;
 
+import java.time.LocalDateTime;
+
 /**
  *
  * @author senen
  */
-public class ModificarArticulo2DTO {
-    Long idUsuario;
+public class InsertarArticulosDTO {
+
     String titulo;
     String descripcion;
     float precio;
     String categoria;
     boolean estadoArticulo;
     String ubicacion;
-    String imagen;
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
+    Long idUsuario;
 
     public String getTitulo() {
         return titulo;
@@ -38,16 +36,17 @@ public class ModificarArticulo2DTO {
         return categoria;
     }
 
-    public boolean getEstadoArticulo() {
+    public boolean isEstadoArticulo() {
         return estadoArticulo;
     }
 
     public String getUbicacion() {
         return ubicacion;
     }
-    
-    public String getImagen(){
-        return imagen;
+
+    public Long getIdUsuario() {
+        return idUsuario;
     }
+
     
 }
