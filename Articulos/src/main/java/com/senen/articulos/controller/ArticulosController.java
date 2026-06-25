@@ -5,10 +5,10 @@
 package com.senen.articulos.controller;
 
 import com.senen.articulos.DTO.ArticulosCategoriaDTO;
+import com.senen.articulos.DTO.ArticulosDTO;
 import com.senen.articulos.DTO.ArticulosUsuariosDTO;
 import com.senen.articulos.DTO.InsertarArticulosDTO;
 import com.senen.articulos.DTO.ModificarArticulo1DTO;
-import com.senen.articulos.DTO.ModificarArticulo2DTO;
 import com.senen.articulos.entities.Articulos;
 import com.senen.articulos.response.ApiResponse;
 import com.senen.articulos.service.ArticulosService;
@@ -55,7 +55,7 @@ public class ArticulosController {
 
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> obtenerArticuloPorId(@PathVariable(name = "id") Long id) {
-        ArticulosCategoriaDTO articulo = service.obtenerArticulo(id);
+        ArticulosDTO articulo = service.obtenerArticulo(id);
         if (articulo == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(new ApiResponse<>(true, "No encontrado o no existe", HttpStatus.NO_CONTENT));
@@ -66,7 +66,7 @@ public class ArticulosController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse<?>> eliminarArticuloPorId(@PathVariable(name = "id") Long id) {
-        ArticulosCategoriaDTO articulo = service.obtenerArticulo(id);
+        ArticulosDTO articulo = service.obtenerArticulo(id);
         if (articulo == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ApiResponse<>(false, "No se pudo eliminar el articulo", HttpStatus.NOT_IMPLEMENTED));
         } else {
@@ -131,6 +131,20 @@ public class ArticulosController {
     @GetMapping("/usuario/{idUsuario}")
     public ResponseEntity<ApiResponse<?>> obtenerArticulosPorIdUsuario(@PathVariable("idUsuario") @Valid Long idUsuario) {
         List<ArticulosCategoriaDTO> listado = service.obtenerArticulosPorUsuario(idUsuario);
+        if (listado.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse<>(true, "Este usuario no ha implementado articulos", HttpStatus.NOT_FOUND));
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(
+                    new ApiResponse<>(true, "Articulos de Usuario: " + idUsuario,
+                            HttpStatus.FOUND, listado));
+        }
+    }
+    
+    @GetMapping("usuarios/vendidos/{idUsuario}")
+    public ResponseEntity<ApiResponse<?>> obtenerArticulosVendidosPorIdUsuario(
+            @PathVariable("idUsuario") @Valid Long idUsuario) {
+        List<ArticulosUsuariosDTO> listado = service.obtenerArticulosVendidos(idUsuario);
         if (listado.isEmpty()) {
             return ResponseEntity.status(HttpStatus.OK).body(
                     new ApiResponse<>(true, "Este usuario no ha implementado articulos", HttpStatus.NOT_FOUND));

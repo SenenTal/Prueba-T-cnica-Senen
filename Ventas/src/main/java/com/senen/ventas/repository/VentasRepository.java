@@ -37,4 +37,8 @@ public interface VentasRepository extends JpaRepository<Ventas, Long> {
     @Query(value = "SELECT * FROM fn_obtener_ventas_usuario(:id_usuario)", nativeQuery= true)
     List<VentasUsuarioDTO> obtenerVentasUsuario(@Param("id_usuario") Long id);
     
+    @Transactional
+    @Query(value = "SELECT * FROM fn_verificar_venta(:id)", nativeQuery=true)
+    Ventas obtenerVentaPorArticuloId(@Param("id") Long id);
+    
 }

@@ -1,3 +1,4 @@
+com\senen\articulos\DTO\ArticulosDTO.class
 com\senen\articulos\exception\DatabaseOperationException.class
 com\senen\articulos\DTO\ModificarArticulo1DTO.class
 com\senen\articulos\DTO\ArticulosUsuariosDTO.class

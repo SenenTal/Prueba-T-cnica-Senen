@@ -5,6 +5,7 @@
 package com.senen.articulos.repository;
 
 import com.senen.articulos.DTO.ArticulosCategoriaDTO;
+import com.senen.articulos.DTO.ArticulosDTO;
 import com.senen.articulos.DTO.ArticulosUsuariosDTO;
 import com.senen.articulos.entities.Articulos;
 import jakarta.transaction.Transactional;
@@ -48,7 +49,7 @@ public interface ArticulosRepository extends JpaRepository<Articulos, Long>{
     
     @Transactional
     @Query(value = "SELECT * FROM fn_obtener_articulo_por_id(:id)", nativeQuery = true)
-    ArticulosCategoriaDTO buscarPorId(@Param("id") Long id_articulo);
+    ArticulosDTO buscarPorId(@Param("id") Long id_articulo);
     
     @Transactional
     @Query(value = """
@@ -97,5 +98,8 @@ public interface ArticulosRepository extends JpaRepository<Articulos, Long>{
     @Query(value = "SELECT * FROM fn_listar_articulos_usuarios()", nativeQuery = true)
     List<ArticulosUsuariosDTO> obtenerArticulosYUsuarios();
     
+    @Transactional
+    @Query(value="SELECT * FROM fn_listar_articulos_vendidos_id(:id_usuario)", nativeQuery=true)
+    List<ArticulosUsuariosDTO> obtenerArticulosVendidosDelUsuario(@Param("id_usuario") Long id);
     
 }

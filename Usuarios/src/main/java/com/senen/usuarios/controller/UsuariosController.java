@@ -4,6 +4,7 @@
  */
 package com.senen.usuarios.controller;
 
+import com.senen.usuarios.dto.AccesoDTO;
 import com.senen.usuarios.dto.UserAccessDTO;
 import com.senen.usuarios.dto.UserAdminDTO;
 import com.senen.usuarios.dto.UserDTO;
@@ -138,5 +139,18 @@ public class UsuariosController {
         }
     }
     
-    
+    @PostMapping("validar/{id}")
+    public ResponseEntity<ApiResponse<?>> validarCredenciales(@PathVariable("id") @Valid Long id,
+            @RequestBody @Valid UserAccessDTO usuario){
+        AccesoDTO acceso = service.validarCredenciales(usuario, id);
+        if(acceso.getAcceso()){
+            return ResponseEntity.status(HttpStatus.ACCEPTED)
+                    .body(new ApiResponse<>(acceso.getAcceso(),"Validación permitida",
+                    HttpStatus.ACCEPTED, true));
+        }else{
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(acceso.getAcceso(), "No autorizado",
+                    HttpStatus.UNAUTHORIZED, false));
+        }
+    }
 }

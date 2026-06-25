@@ -5,7 +5,9 @@
 package com.senen.usuarios.service.impl;
 
 import com.senen.usuarios.dto.AccesoDTO;
+import com.senen.usuarios.dto.UserAccessDTO;
 import com.senen.usuarios.dto.UserAdminDTO;
+import com.senen.usuarios.dto.UserDTO;
 import com.senen.usuarios.entities.Usuarios;
 import com.senen.usuarios.exception.DatabaseOperationException;
 import com.senen.usuarios.repository.UsuariosRepository;
@@ -98,5 +100,12 @@ public class UsuarioServiceImpl implements UsuariosService {
         }
     }
     
-
+    @Override
+    public AccesoDTO validarCredenciales(UserAccessDTO usuario, Long id){
+        try{
+            return repository.validarCredenciales(id, usuario.getUsername(), usuario.getPassword());
+        } catch(Exception ex){
+            throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
+        }
+    }
 }

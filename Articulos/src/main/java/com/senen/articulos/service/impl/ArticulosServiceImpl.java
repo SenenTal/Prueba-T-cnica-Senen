@@ -5,6 +5,7 @@
 package com.senen.articulos.service.impl;
 
 import com.senen.articulos.DTO.ArticulosCategoriaDTO;
+import com.senen.articulos.DTO.ArticulosDTO;
 import com.senen.articulos.DTO.ArticulosUsuariosDTO;
 import com.senen.articulos.DTO.InsertarArticulosDTO;
 import com.senen.articulos.DTO.ModificarArticulo1DTO;
@@ -34,7 +35,7 @@ public class ArticulosServiceImpl implements ArticulosService {
     private ArticulosRepository repository;
 
     @Override
-    public ArticulosCategoriaDTO obtenerArticulo(Long id) {
+    public ArticulosDTO obtenerArticulo(Long id) {
         try {
             return repository.buscarPorId(id);
         } catch (Exception ex) {
@@ -168,6 +169,15 @@ public class ArticulosServiceImpl implements ArticulosService {
     public List<ArticulosUsuariosDTO> obtenerArticulosYUsuarios() {
         try {
             return repository.obtenerArticulosYUsuarios();
+        } catch (Exception ex) {
+            throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
+        }
+    }
+
+    @Override
+    public List<ArticulosUsuariosDTO> obtenerArticulosVendidos(Long id) {
+        try {
+            return repository.obtenerArticulosVendidosDelUsuario(id);
         } catch (Exception ex) {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }

@@ -60,5 +60,5 @@ public class VentasServiceImpl implements VentasService {
             throw new DatabaseOperationException(ex.getLocalizedMessage(), ex.getCause());
         }
     }
-
+    
 }

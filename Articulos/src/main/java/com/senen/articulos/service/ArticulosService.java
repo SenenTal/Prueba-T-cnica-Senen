@@ -5,6 +5,7 @@
 package com.senen.articulos.service;
 
 import com.senen.articulos.DTO.ArticulosCategoriaDTO;
+import com.senen.articulos.DTO.ArticulosDTO;
 import com.senen.articulos.DTO.ArticulosUsuariosDTO;
 import com.senen.articulos.DTO.InsertarArticulosDTO;
 import com.senen.articulos.DTO.ModificarArticulo1DTO;
@@ -21,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public interface ArticulosService {
     
-    ArticulosCategoriaDTO obtenerArticulo(Long id);
+    ArticulosDTO obtenerArticulo(Long id);
     
     List<ArticulosCategoriaDTO> obtenerArticulos();
     
@@ -41,5 +42,7 @@ public interface ArticulosService {
     List<ArticulosCategoriaDTO> buscarPorTitulo(String titulo);
     
     List<ArticulosUsuariosDTO> obtenerArticulosYUsuarios();
+    
+    List<ArticulosUsuariosDTO> obtenerArticulosVendidos(Long id);
     
 }

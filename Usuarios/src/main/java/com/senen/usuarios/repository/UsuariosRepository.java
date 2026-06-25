@@ -55,5 +55,10 @@ public interface UsuariosRepository extends JpaRepository<Usuarios, Long>{
     @Transactional
     @Query(value = "SELECT * FROM fn_hacer_user(:user)", nativeQuery = true)
     UserAdminDTO hacerUser(@Param("user") String user);
+    
+    @Transactional
+    @Query(value="SELECT * FROM fn_validar_credenciales(:id, :user, :password)", nativeQuery=true)
+    AccesoDTO validarCredenciales(@Param("id") Long id, @Param("user") String user, 
+            @Param("password") String password);
 
 }

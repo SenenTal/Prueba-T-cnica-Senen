@@ -4,7 +4,10 @@
  */
 package com.senen.usuarios.service;
 
+import com.senen.usuarios.dto.AccesoDTO;
+import com.senen.usuarios.dto.UserAccessDTO;
 import com.senen.usuarios.dto.UserAdminDTO;
+import com.senen.usuarios.dto.UserDTO;
 import com.senen.usuarios.entities.Usuarios;
 import java.util.List;
 
@@ -29,5 +32,7 @@ public interface UsuariosService {
     Usuarios modificarUsuario(Long id, String username, String password, String nickname);
     
     UserAdminDTO hacerUser(String username);
+    
+    AccesoDTO validarCredenciales(UserAccessDTO usuario, Long id);
     
 }

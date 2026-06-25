@@ -1,4 +1,5 @@
 com\senen\ventas\service\VentasService.class
+com\senen\ventas\DTO\CompradoresDTO.class
 com\senen\ventas\DTO\CrearVentaDTO.class
 com\senen\ventas\entities\Ventas.class
 com\senen\ventas\response\ApiResponse.class
